@@ -1,0 +1,12 @@
+#! /bin/zsh
+# kill the server that was just started and delete the pid file
+if [[ -a pid ]]; then
+    pkill -F pid
+    value=`cat pid`
+    echo "Killed http server running at pid:$value"
+    rm pid
+    echo "Deleted file 'pid'"
+else
+    echo "Error. File 'pid' does not exist"
+    return 1
+fi
