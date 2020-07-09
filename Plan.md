@@ -18,28 +18,26 @@ Every cell interacts with its eight neighbours, which are the cells that are hor
 - grid of cells (booleans)
 
 ## Display requirements
+
 - size of grid (for basic implementation)
 - random seed
 
 ## interactivity requirements
 
 - [ ] user should be able to pause the simulation 
-- [ ] user should be able to reset the grid
+- [x] user should be able to reset the grid
 - [x] user should be able to erase (fill cells with 0s)
 - [x] user should be able to fill cells (fill cells with 1s)
 - [ ] user should be able to set the size of the simulation 
 - [ ] user should be able to play the simulation and watch it progress
 
-## directory structure
+## Directory structure
 
 - static
     - index.html (main display for page)
     - index.js (contains functions for user interactivity)
-        - fillCell()
-        - clearCell()
-        - initSim()
-        - resetSim()
-        - update()
+        - initSim() initialize the display board and the boardState global variable
+        - update() update the display board based on the boardState global variable
  
     - target
         - life.js
@@ -49,4 +47,6 @@ Every cell interacts with its eight neighbours, which are the cells that are hor
         - clear_cell(int x, int y) given the coordinates of a cell, change its contents to a 0
         - fill_cell(int x, int y) given the coordinates of a cell, change its contents to a 1
         - step() advances the simulation by one step, returns array of cell locations to change
-    
+        - resetSim()
+- run (script that sets up test server)
+- kill_srv (script that kills server using process id stored in pid file)
