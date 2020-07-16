@@ -1,5 +1,14 @@
 #! /bin/zsh
 # run a test server on port 8000
+if [[ -a pid ]]; then
+    pkill -F pid
+    value=`cat pid`
+    echo "Killed http server running on process with id: $value"
+    rm pid
+    echo "Deleted file 'pid'"
+fi
+
 python3 -m http.server 8000 --directory static &> /dev/null & echo $! > pid &
 pid_val=`cat pid`
+
 echo "Started server on port 8000. pid: $pid_val"

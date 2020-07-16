@@ -24,7 +24,7 @@ Every cell interacts with its eight neighbours, which are the cells that are hor
 
 ## interactivity requirements
 
-- [ ] user should be able to pause the simulation 
+- [x] user should be able to pause the simulation 
 - [x] user should be able to reset the grid
 - [x] user should be able to erase (fill cells with 0s)
 - [x] user should be able to fill cells (fill cells with 1s)
@@ -50,3 +50,5 @@ Every cell interacts with its eight neighbours, which are the cells that are hor
         - resetSim()
 - run (script that sets up test server)
 - kill_srv (script that kills server using process id stored in pid file)
+
+
