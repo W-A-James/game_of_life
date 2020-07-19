@@ -1,5 +1,7 @@
-#! /bin/zsh
-# run a test server on port 8000
+#! /bin/bash
+# run a test server on port supplied by argument
+# if no argument is supplied, runs on port 8000
+
 if [[ -a pid ]]; then
     pkill -F pid
     value=`cat pid`
@@ -8,7 +10,16 @@ if [[ -a pid ]]; then
     echo "Deleted file 'pid'"
 fi
 
-python3 -m http.server 8000 --directory static &> /dev/null & echo $! > pid &
-pid_val=`cat pid`
+if [ $# -eq 0 ]
+then
+    echo "No port supplied, using port 8000"
+    python3.8 -m http.server 8000 --directory static &> /dev/null & echo $! > pid &
+    pid_val=`cat pid`
+    echo "Started server on port 8000. pid: $pid_val"
+else
+    python3.8 -m http.server $1 --directory static &> /dev/null & echo $! > pid &
+    pid_val=`cat pid`
+    echo "Started server on port $1. pid: $pid_val"
+fi
 
-echo "Started server on port 8000. pid: $pid_val"
+return 0
