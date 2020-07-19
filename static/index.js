@@ -4,10 +4,12 @@
 // TODO: have this be set by the user using a form/field
 // TODO: create handlers for when the value inside the form/field changes
 
-var numRows = 100;
-var numCols = 100;
+var numRows = 60;
+var numCols = 60;
 var board_deltas = [];
 var isPaused = true;
+var lastPause = Date.now();
+var timeSincePause = 0;
 
 var Module = {
     onRuntimeInitialized: function() {
@@ -24,8 +26,8 @@ const parentDiv = document.getElementById("parent-div");
 // TODO: ensure that this properly resizes the container and parentDiv
 //       the css ensurs that the rows are dynamically resized
 function resizeGridRows(event) {
-    let eventTarget = event.target;
-    let children = eventTarget.children;
+    const eventTarget = event.target;
+    const children = eventTarget.children;
     for (let i = 0; i < children.length; i ++) {
         children[i].width = eventTarget.clientWidth / numCols + "px";
         children[i].height = eventTarget.clientHeight / numRows + "px";
@@ -33,7 +35,7 @@ function resizeGridRows(event) {
 }
 
 function swapColour(cell) {
-    let cellNum = Number(cell.id.split("-")[2]);
+    const cellNum = Number(cell.id.split("-")[2]);
     if (cell.classList[1] == "grid-square-empty") {
         cell.classList.remove("grid-square-empty");
         cell.classList.add("grid-square-full");
@@ -47,7 +49,7 @@ function swapColour(cell) {
 }
 
 function fillCell(cellNum) {
-    let cell = document.getElementById(`grid-square-${cellNum}`);
+    const cell = document.getElementById(`grid-square-${cellNum}`);
     if (cell.classList[1] == "grid-square-empty") {
         cell.classList.remove("grid-square-empty");
         cell.classList.add("grid-square-full");
@@ -56,7 +58,7 @@ function fillCell(cellNum) {
 }
 
 function clearCell(cellNum) {
-    let cell = document.getElementById(`grid-square-${cellNum}`);
+    const cell = document.getElementById(`grid-square-${cellNum}`);
     if (cell.classList[1] == "grid-square-full") {
         cell.classList.remove("grid-square-full");
         cell.classList.add("grid-square-empty");
@@ -71,6 +73,9 @@ function swapOnClick(event) {
 // draw empty board
 function initSim() {
     container.style.height = container.clientWidth + "px";
+//    container.addEventListener("resize", (event) => {
+//       container.style.height = container.clientWidth + "px";
+//          });
     for (let i = 0; i < numRows; i++) {
         let row = document.createElement("div");
         row.classList.add("row");
@@ -145,6 +150,15 @@ function main() {
     }, 200);
 }
 
+window.addEventListener("resize", () => {
+    container.style.height = container.clientWidth + "px";
+});
+
 window.addEventListener("unload", () => {
     Module.free_board();
+});
+
+window.addEventListener("keydown", (event) => {
+    if (event.keyCode === 32) pauseSim();
+    if (event.keyCode === 82) resetSim();
 });

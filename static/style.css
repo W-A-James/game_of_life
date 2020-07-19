@@ -40,10 +40,12 @@ div.grid-square {
 
 div.grid-square-empty {
     background-color: white;
+    box-shadow: inset 0px 0px 0px 1px rgba(0,0,0, 0.3);
 }
 
 div.grid-square-full {
     background-color: black;
+    box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.1);
 }
 
 body {
