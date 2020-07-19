@@ -26,7 +26,7 @@ void profile_step(const std::uint32_t n, const std::uint32_t num_steps, const do
     }
     auto end = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> elapsed = end - start;
-    std::printf("| n = %4d | num_steps = %4d | frac_full: %.2f | time_elapsed: %4.3fs |\n", n, num_steps, frac_full, elapsed.count());
+    std::printf("| n = %4d | num_steps = %4d | frac_full: %.2f | time_elapsed: %4.3fs | steps per s: %6.2f |\n", n, num_steps, frac_full, elapsed.count(), ((double)num_steps)/elapsed.count());
     free_board(); 
 }
 

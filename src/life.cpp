@@ -24,8 +24,8 @@
 #define TRUE_ 1
 #define FALSE_ 0
 
-std::queue<const Change::Change*>* changeQueue = new std::queue<const Change::Change*>();
-std::queue<std::uint32_t> * recentChangeQueue = new std::queue<std::uint32_t>();
+std::queue<const Change::Change*>* changeQueue;// = new std::queue<const Change::Change*>();
+std::queue<std::uint32_t> * recentChangeQueue;// = new std::queue<std::uint32_t>();
 Board::State* board_state = NULL;
 #ifndef NO_EMSCRIPTEN
 using namespace emscripten;
@@ -178,6 +178,8 @@ void step(const std::uint32_t u32_num_rows, const std::uint32_t u32_num_cols) {
 
 void init_board(const std::uint32_t u32_num_rows, const std::uint32_t u32_num_cols) {
     board_state = new Board::State(u32_num_rows, u32_num_cols);
+    changeQueue = new std::queue<const Change::Change*>();
+    recentChangeQueue = new std::queue<std::uint32_t>();
 }
 
 void free_board() {
