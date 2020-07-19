@@ -1,4 +1,4 @@
-#! /bin/zsh
+#! /bin/bash
 # kill the server that was just started and delete the pid file
 if [[ -a pid ]]; then
     pkill -F pid
@@ -8,5 +8,4 @@ if [[ -a pid ]]; then
     echo "Deleted file 'pid'"
 else
     echo "Error. File 'pid' does not exist"
-    return 1
 fi
