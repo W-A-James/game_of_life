@@ -3,3 +3,4 @@
 **/*~
 pid
 **/*.o
+static/target/*
