@@ -12,14 +12,6 @@ class State {
 
         ~State();
 
-        // State::get_ptr_at intended to allow changes to the data
-        // structure from within ../static/index.js via wasm bindings
-        
-        // should throw invalid argument exception when out of range
-        std::uint8_t * const get_ptr_at(const std::uint32_t);
-        std::uint8_t * const get_ptr_at(const std::uint32_t,
-                                 const std::uint32_t);
-
         // should throw invalid argument exception when out of range
         const std::uint8_t get_val(const std::uint32_t) const;
         const std::uint8_t get_val(const std::uint32_t, const uint32_t) const;

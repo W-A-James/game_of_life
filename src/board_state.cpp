@@ -25,18 +25,6 @@ State::~State() {
     std::free(board_state_);
 }
 
-std::uint8_t * const State::get_ptr_at(const std::uint32_t u32_cell_num) {
-    if (u32_cell_num >= u32_num_rows_ * u32_num_cols_)
-        throw std::out_of_range("Cell out of range");
-    return &(board_state_[u32_cell_num/u32_num_cols_][u32_cell_num%u32_num_cols_]);
-}
-
-std::uint8_t * const State::get_ptr_at(const std::uint32_t u32_row, const std::uint32_t u32_col) {
-    if (u32_row >= u32_num_rows_ || u32_col >= u32_num_cols_)
-        throw std::out_of_range("Cell out of range"); 
-    return &(board_state_[u32_row][u32_col]);
-}
-
 const std::uint8_t State::get_val(const std::uint32_t u32_cell_num) const {
     if (u32_cell_num >= u32_num_rows_ * u32_num_cols_)
         throw std::out_of_range("Cell out of range");
