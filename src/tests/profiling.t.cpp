@@ -17,7 +17,6 @@ void profile_step(const std::uint32_t n, const std::uint32_t num_steps, const do
     std::uniform_int_distribution<> distrib(0, (n*n) - 1);
     while (num_full/(n*n) < frac_full) {
         std::uint32_t cell_num = distrib(gen);
-        while (board_state->get_val(cell_num) == 1) cell_num = distrib(gen);
         fill_cell(cell_num);
         num_full++;
     }
