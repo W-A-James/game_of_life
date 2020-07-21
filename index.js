@@ -1,8 +1,10 @@
-// TODO: ensure that resizing of the #container class works properly to ensure that
-//       grid cells are always square
-
-// TODO: have this be set by the user using a form/field
+// TODO: have size be set by the user using a form/field
 // TODO: create handlers for when the value inside the form/field changes
+
+// TODO: add sidebar that has options to start drawing, start clearing
+//       reset, or pause
+// TODO: add keyboard event handler to start drawing, start clearing,
+//       reset or pause
 
 var numRows = 60;
 var numCols = 60;
@@ -10,6 +12,8 @@ var board_deltas = [];
 var isPaused = true;
 var lastPause = Date.now();
 var timeSincePause = 0;
+var mouseDown = false;
+var stepPeriod = 25;
 
 var Module = {
     onRuntimeInitialized: function() {
@@ -23,8 +27,6 @@ const container = document.getElementById("container");
 // holds rows of div.grid-square elements
 const parentDiv = document.getElementById("parent-div");
 
-// TODO: ensure that this properly resizes the container and parentDiv
-//       the css ensurs that the rows are dynamically resized
 function resizeGridRows(event) {
     const eventTarget = event.target;
     const children = eventTarget.children;
@@ -70,12 +72,19 @@ function swapOnClick(event) {
     if (isPaused) swapColour(event.target);
 }
 
+function setMouseDown() {
+    if (isPaused)
+        mouseDown = true;
+}
+
+function unsetMouseDown() {
+    if (isPaused)
+        mouseDown = false;
+}
+
 // draw empty board
 function initSim() {
     container.style.height = container.clientWidth + "px";
-//    container.addEventListener("resize", (event) => {
-//       container.style.height = container.clientWidth + "px";
-//          });
     for (let i = 0; i < numRows; i++) {
         let row = document.createElement("div");
         row.classList.add("row");
@@ -85,9 +94,13 @@ function initSim() {
             div.id = `grid-square-${i*numCols+j}`;
             div.classList.add("grid-square");
             div.classList.add("grid-square-empty");
-
             // add handler
             div.addEventListener("click", swapOnClick);
+            div.addEventListener("mousedown", setMouseDown);
+            div.addEventListener("mouseup", unsetMouseDown);
+            div.addEventListener("mouseover", (event) => {
+                if (mouseDown) swapOnClick(event);
+            });
             row.append(div);
         }
     }
@@ -120,6 +133,7 @@ function pauseSim() {
         pauseButton.innerHTML = "Play";
         isPaused= true;
     }
+    unsetMouseDown();
 }
 
 // iterate over board_deltas array and apply appropriate changes
@@ -139,15 +153,11 @@ function updateBoard() {
 
 function main() {
     window.setInterval(()=> {
-        if (isPaused) {
-
-        }
-
-        else {
+        if (!isPaused) {
             Module.step();
             updateBoard();
         }
-    }, 200);
+    }, stepPeriod);
 }
 
 window.addEventListener("resize", () => {
@@ -159,6 +169,8 @@ window.addEventListener("unload", () => {
 });
 
 window.addEventListener("keydown", (event) => {
+    // space
     if (event.keyCode === 32) pauseSim();
+    // r
     if (event.keyCode === 82) resetSim();
 });
