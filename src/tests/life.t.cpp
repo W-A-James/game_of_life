@@ -16,9 +16,6 @@ void test_init_board() {
 void test_free_board() {
     init_board(10, 10);
     std::array<std::uint8_t*, 10> pointers;
-    for (std::uint32_t i = 0; i < board_state->get_num_rows(); i++) {
-        pointers[i] = board_state->get_ptr_at(i, 0);
-    }
     free_board();
     std::cout << "test_free_board() passed!\n";
 }

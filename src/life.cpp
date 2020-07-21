@@ -1,11 +1,3 @@
-// TODO: refactor all accesses to board_state
-//       need to do manual memory management and memory accessing
-//       of this array from within this file and the js file
-//
-//       Reasoning behind this decision is avoiding copying memory back and forth
-//       and having to set the same index in the 2d array twice for each change at every
-//       time step
-
 #ifndef NO_EMSCRIPTEN
 #include <emscripten/emscripten.h>
 #include <emscripten/bind.h>
@@ -24,17 +16,14 @@
 #define TRUE_ 1
 #define FALSE_ 0
 
-std::queue<const Change::Change*>* changeQueue;// = new std::queue<const Change::Change*>();
-std::queue<std::uint32_t> * recentChangeQueue;// = new std::queue<std::uint32_t>();
+std::queue<const Change::Change*>* changeQueue;
+std::queue<std::uint32_t> * recentChangeQueue;
 Board::State* board_state = NULL;
 #ifndef NO_EMSCRIPTEN
 using namespace emscripten;
 
 val numRows = val::global("numRows");
 val numCols = val::global("numCols");
-val boardStatePtr = val::global("boardStatePtr");
-
-//Board::State* board_state;
 
 // Bring in functions that modify the display in browser
 EM_JS(void, update_cell_display, (std::uint32_t cell_num, bool change), {
@@ -163,8 +152,6 @@ void step(const std::uint32_t u32_num_rows, const std::uint32_t u32_num_cols) {
 
     while (!changeQueue->empty()) {
         const Change::Change* change = changeQueue->front();
-        recentChangeQueue->push(change->getCell());
-        changeQueue->pop();
         switch (change->getType()) {
             case Change::DEAD:
                 clear_cell(change->getCell());
@@ -173,19 +160,22 @@ void step(const std::uint32_t u32_num_rows, const std::uint32_t u32_num_cols) {
                 fill_cell(change->getCell());
                 break;
         }        
+        //recentChangeQueue->push(change->getCell());
+        delete change;
+        changeQueue->pop();
     }
 }
 
 void init_board(const std::uint32_t u32_num_rows, const std::uint32_t u32_num_cols) {
     board_state = new Board::State(u32_num_rows, u32_num_cols);
     changeQueue = new std::queue<const Change::Change*>();
-    recentChangeQueue = new std::queue<std::uint32_t>();
+    // recentChangeQueue = new std::queue<std::uint32_t>();
 }
 
 void free_board() {
     delete board_state;
     delete changeQueue;
-    delete recentChangeQueue;
+    //delete recentChangeQueue;
 }
 
 #ifndef NO_EMSCRIPTEN
