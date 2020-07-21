@@ -1,0 +1,53 @@
+#! /usr/bin/python3
+from os import getpid, unlink, kill
+from os.path import exists
+from argparse import ArgumentParser
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+import psutil
+
+
+def run(port,
+        server_class=HTTPServer,
+        handler_class=SimpleHTTPRequestHandler):
+    server_address = ("", port)
+    httpd = server_class(server_address, handler_class)
+    print("Now running server on port: {} with pid: {}".format(
+        port, getpid()))
+
+    with open("pid", "w") as fp:
+        fp.write(str(getpid()))
+
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+def kill_srv():
+    with open("pid") as fp:
+        pid = int(fp.read())
+    kill(pid, 9)
+    print("Killed server running with pid: {}".format(pid))
+    unlink("pid")
+    print("Deleted file 'pid'")
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser(description="Run a server on a specified port")
+    parser.add_argument("--port", type=int, )
+    args = parser.parse_args()
+    
+    if exists("pid"):
+        with open("pid") as fp:
+            pid = int(fp.read())
+        kill(pid, 9)
+        print("Killed server running with pid: {}".format(pid))
+        unlink("pid")
+        print("Deleted file 'pid'")
+        
+    if args.port:
+        run(args.port)
+    else:
+        run(8000)
+
+

@@ -1,11 +1,14 @@
-#! /bin/bash
-# kill the server that was just started and delete the pid file
-if [[ -a pid ]]; then
-    pkill -F pid
-    value=`cat pid`
-    echo "Killed http server running at pid:$value"
-    rm pid
-    echo "Deleted file 'pid'"
-else
-    echo "Error. File 'pid' does not exist"
-fi
+#! /usr/bin/python3
+from os import kill, unlink
+from os.path import exists
+
+if __name__ == "__main__":
+    if exists("pid"):
+        with open("pid") as fp:
+            pid = int(fp.read())
+        kill(pid, 9)
+        print("Killed server running with pid: {}".format(pid))
+        unlink("pid")
+        print("Deleted file 'pid'")
+    else:
+        print("File: 'pid' does not exist")
