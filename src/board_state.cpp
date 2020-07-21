@@ -1,3 +1,4 @@
+//TODO: refactor this to use bit-setting to save on space
 #include "board_state.hpp"
 #include <cstdlib>
 #include <stdexcept>
