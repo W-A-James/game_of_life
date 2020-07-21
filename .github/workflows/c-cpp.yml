@@ -15,5 +15,5 @@ jobs:
     - uses: actions/checkout@v2
     - name: move_to_src
       run: cd src && pwd && ls
-    - name: make
+    - name: make -f Makefile
       run: make all
