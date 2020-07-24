@@ -48,6 +48,40 @@ div.grid-square-full {
     box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.1);
 }
 
+div#nav {
+    /*height: 100%;*/
+    width: 5vw;
+    position: fixed;
+    left: 0px;
+    top: 5vh;
+    bottom: 5vh;
+    display: block;
+    margin-left: 0px;
+}
+
+div#nav button {
+    display: block;
+    width: 100%;
+    border-style: none;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 10px 5px 10px 5px;
+    font-size: large;
+}
+
+div#nav_ghost {
+    width: 5vw;
+    position: fixed;
+    left: -5vh;
+    top: 5vh;
+    bottom: 5vh;
+    display: block;
+    margin-left: 0px;
+}
+
+div#nav button:hover {
+    color: white;
+}
+
 body {
     padding: 0;
     background-color: blue;
