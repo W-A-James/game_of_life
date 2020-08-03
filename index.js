@@ -13,7 +13,7 @@ var isPaused = true;
 var lastPause = Date.now();
 var timeSincePause = 0;
 var mouseDown = false;
-var stepPeriod = 25;
+var stepPeriod = 75;
 
 var Module = {
     onRuntimeInitialized: function() {

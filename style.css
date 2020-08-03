@@ -76,6 +76,7 @@ div#nav_ghost {
     bottom: 5vh;
     display: block;
     margin-left: 0px;
+    height: 90vh;
 }
 
 div#nav button:hover {
