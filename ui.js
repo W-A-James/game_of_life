@@ -1,49 +1,41 @@
-const navGhost = document.getElementById("nav_ghost");
-const nav = document.getElementById("nav");
+let navGhost;
+let nav;
+let navIsMoving = false;
+let navIn = false;
+const navWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-width'));
 
-const NAV_STAT = {
-    SLIDING_IN: 0,
-    IN: 1,
-    SLIDING_OUT: 2,
-    OUT: 3
-}
+window.addEventListener("load", ()=>{
+    navGhost = document.getElementById("nav_ghost");
+    nav = document.getElementById("nav");
 
-let navSlideInInterval;
-let navSlideOutInterval;
-const interval_ms = 100;
+    const interval_ms = 100;
 
-let navStatus = NAV_STAT.IN;
-function slideNavOut() {
-}
+    navGhost.addEventListener("mouseover", (event) => {
+        if (!navIsMoving) {
+            navIsMoving = true;
+            if (navIn) {
+                nav.classList.remove("movingIn");
+                nav.classList.add("movingOut");
+                navIn = false;    
+            }
+            else {
+                nav.classList.remove("movingOut");
+                nav.classList.add("movingIn");
+                navIn = true;
+            }
+        }
+    });
 
-function slideNavIn() {
-}
-
-navGhost.addEventListener("mouseover", (event) => {
-    console.log("mouseover!");
-    switch (navStatus) {
-        case NAV_STAT.SLIDING_IN:
-        case NAV_STAT.IN:
-            //clearInterval(navSlideInInterval);
-            //navSlideOutInterval = window.setInterval(
-                //() -> {
-                    // start sliding out
-                    //nav.style.left = parseInt(nav.style.left) + 5 + "px";
-                    // if fully out, do nothing
-                //}, interval_ms
-            //)
-            break;
-        case NAV_STAT.SLIDING_OUT:
-        case NAV_STAT.OUT:
-            //clearInterval(navSlideOutInterval);
-            //navSlideInInterval = window.setInterval(
-                //() => {
-                    // start sliding in 
-                    // if fully in, do nothing
-                //}, interval_ms
-            //)
-            break;
-            break;
-    }
-})
+    window.setInterval(() => { 
+        let view_width = window.innerWidth;
+        let left_ = window.getComputedStyle(nav, null).getPropertyValue("left");
+        let float_left = Math.round(100*parseFloat(left_)/view_width);
+        if (navIn) {
+            if (float_left <= -navWidth - 1) navIsMoving = false;
+        }
+        else {
+            if (float_left >= -1) navIsMoving = false;
+        }
+    }, 50);
+});
 
