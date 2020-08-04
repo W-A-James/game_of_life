@@ -29,7 +29,7 @@ Every cell interacts with its eight neighbours, which are the cells that are hor
 - [x] user should be able to erase (fill cells with 0s)
 - [x] user should be able to fill cells (fill cells with 1s)
 - [ ] user should be able to set the size of the simulation 
-- [ ] user should be able to play the simulation and watch it progress
+- [x] user should be able to play the simulation and watch it progress
 
 ## Directory structure
 

@@ -5,7 +5,7 @@ CXX = emcc
 all: target/life.js
 
 target/life.js: $(OBJFILES) 
-	emcc --bind $(CXXFLAGS) -o ../target/life.js $(OBJFILES)
+	emcc --bind $(CXXFLAGS) -o target/life.js $(OBJFILES)
 
 src/%.o: src/%.cpp src/%.hpp
 	emcc $(CXXFLAGS) -c $< -o $@

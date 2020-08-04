@@ -3,14 +3,22 @@
     <head>
         <title>Life</title>
         <link href="/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
-        <button onclick="pauseSim()" id="pauseButton">Play</button>
-        <button onclick="resetSim()" id="resetButton">Reset</button>
+        <div id="nav">
+            <button onclick="pauseSim()" id="pauseButton">Play</button>
+            <button onclick="resetSim()" id="resetButton">Reset</button>
+            <button onclick="startDrawing()" id="drawButton">Draw</button>
+            <button onclick="startClearing()" id="clearButton">Clear</button>
+        </div>
+        <div id="nav_ghost"></div>
+
         <div id="container">
             <div id="parent-div"></div>
         </div>
     </body>
     <script src="/index.js"></script>
+    <script src="/ui.js"></script>
     <script src="/target/life.js"></script>
 </html>

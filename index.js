@@ -10,10 +10,8 @@ var numRows = 60;
 var numCols = 60;
 var board_deltas = [];
 var isPaused = true;
-var lastPause = Date.now();
-var timeSincePause = 0;
-var mouseDown = false;
-var stepPeriod = 25;
+var mouseDown = false; var stepPeriod = 75;
+var drawing = true;
 
 var Module = {
     onRuntimeInitialized: function() {
@@ -36,23 +34,9 @@ function resizeGridRows(event) {
     }
 }
 
-function swapColour(cell) {
-    const cellNum = Number(cell.id.split("-")[2]);
-    if (cell.classList[1] == "grid-square-empty") {
-        cell.classList.remove("grid-square-empty");
-        cell.classList.add("grid-square-full");
-        Module.fill_cell_(cellNum);
-    }
-    else {
-        cell.classList.remove("grid-square-full");
-        cell.classList.add("grid-square-empty");
-        Module.clear_cell_(cellNum);
-    }
-}
-
 function fillCell(cellNum) {
     const cell = document.getElementById(`grid-square-${cellNum}`);
-    if (cell.classList[1] == "grid-square-empty") {
+    if (cell.classList.contains("grid-square-empty")) {
         cell.classList.remove("grid-square-empty");
         cell.classList.add("grid-square-full");
     }
@@ -61,15 +45,32 @@ function fillCell(cellNum) {
 
 function clearCell(cellNum) {
     const cell = document.getElementById(`grid-square-${cellNum}`);
-    if (cell.classList[1] == "grid-square-full") {
+    if (cell.classList.contains("grid-square-full")) {
         cell.classList.remove("grid-square-full");
         cell.classList.add("grid-square-empty");
     }
     Module.clear_cell_(cellNum);
 }
 
-function swapOnClick(event) {
-    if (isPaused) swapColour(event.target);
+function changeOnClick(event) {
+    if (isPaused) {
+    const cell = event.target;
+    const cellNum = Number(event.target.id.split("-")[2]);
+        if (drawing) {
+            if (cell.classList.contains("grid-square-empty")) {
+                cell.classList.remove("grid-square-empty");
+                cell.classList.add("grid-square-full");
+                Module.fill_cell_(cellNum);
+            }
+        }
+        else {
+            if (cell.classList.contains("grid-square-full")) {
+                cell.classList.remove("grid-square-full");
+                cell.classList.add("grid-square-empty");
+                Module.clear_cell_(cellNum);
+            }
+        }
+    }
 }
 
 function setMouseDown() {
@@ -95,15 +96,20 @@ function initSim() {
             div.classList.add("grid-square");
             div.classList.add("grid-square-empty");
             // add handler
-            div.addEventListener("click", swapOnClick);
-            div.addEventListener("mousedown", setMouseDown);
-            div.addEventListener("mouseup", unsetMouseDown);
+            div.addEventListener("click", changeOnClick);
             div.addEventListener("mouseover", (event) => {
-                if (mouseDown) swapOnClick(event);
+                if (mouseDown) changeOnClick(event);
             });
             row.append(div);
         }
     }
+    document.addEventListener("mousedown", setMouseDown);
+    document.addEventListener("mouseup", unsetMouseDown);
+    const drawButton = document.getElementById("drawButton");
+    const clearButton = document.getElementById("clearButton");
+    drawButton.classList.add("selected");
+    clearButton.classList.add("deselected");
+
     Module.init_board();
 }
 
@@ -160,6 +166,45 @@ function main() {
     }, stepPeriod);
 }
 
+function selectDraw() {
+    const drawButton = document.getElementById("drawButton");
+    const clearButton = document.getElementById("clearButton");
+
+    if (drawButton.classList.contains("deselected")) {
+        drawButton.classList.remove("deselected");
+        drawButton.classList.add("selected");
+    }
+    if (clearButton.classList.contains("selected")) {
+        clearButton.classList.remove("selected");
+        clearButton.classList.add("deselected");
+    }
+}
+
+function selectClear() {
+    const drawButton = document.getElementById("drawButton");
+    const clearButton = document.getElementById("clearButton");
+
+    if (drawButton.classList.contains("selected")) {
+        drawButton.classList.remove("selected");
+        drawButton.classList.add("deselected");
+    }
+
+    if (clearButton.classList.contains("deselected")) {
+        clearButton.classList.remove("deselected");
+        clearButton.classList.add("selected");
+    }
+}
+
+function startDrawing() {
+    drawing = true;
+    selectDraw();
+}
+
+function startClearing() {
+    drawing = false;
+    selectClear();
+}
+
 window.addEventListener("resize", () => {
     container.style.height = container.clientWidth + "px";
 });
@@ -169,8 +214,12 @@ window.addEventListener("unload", () => {
 });
 
 window.addEventListener("keydown", (event) => {
-    // space
-    if (event.keyCode === 32) pauseSim();
+    // space or p
+    if (event.keyCode === 80 || event.keyCode === 32) pauseSim();
     // r
     if (event.keyCode === 82) resetSim();
+    // d
+    if (event.keyCode === 68) startDrawing();
+    // c
+    if (event.keyCode === 67) startClearing();
 });
