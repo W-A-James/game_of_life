@@ -156,6 +156,12 @@ function initSim() {
     drawButton.classList.add("selected");
     clearButton.classList.add("deselected");
 
+    container.classList.add("pen_cursor");
+    // Prevent default drga behaviour
+    container.addEventListener("drag", (event) => {
+        event.preventDefault();
+    });
+
     Module.init_board();
 }
 
@@ -240,13 +246,29 @@ function selectClear() {
     }
 }
 
+function setDrawingCursor() {
+    if (container.classList.contains("eraser_cursor")) {
+        container.classList.remove("eraser_cursor");
+        container.classList.add("pen_cursor");
+    }
+}
+
+function setClearingCursor() {
+    if (container.classList.contains("pen_cursor")) {
+        container.classList.remove("pen_cursor");
+        container.classList.add("eraser_cursor");
+    }
+}
+
 function startDrawing() {
     drawing = true;
     selectDraw();
+    setDrawingCursor();
 }
 
 function startClearing() {
     drawing = false;
     selectClear();
+    setClearingCursor();
 }
 
