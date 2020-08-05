@@ -1,13 +1,17 @@
 #! /usr/bin/python3
 from os import kill, unlink
 from os.path import exists
+import signal   
 
 if __name__ == "__main__":
     if exists("pid"):
         with open("pid") as fp:
             pid = int(fp.read())
-        kill(pid, 9)
-        print("Killed server running with pid: {}".format(pid))
+        try:
+            kill(pid, signal.SIGUSR1)
+            print("Killed server running with pid: {}".format(pid))
+        except ProcessLookupError:
+            pass
         unlink("pid")
         print("Deleted file 'pid'")
     else:
