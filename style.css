@@ -129,3 +129,11 @@ body {
 .deselected {
     color: black;
 }
+
+.pen_cursor {
+    cursor: url("/assets/pen_scaled.svg") 0 35, default;
+}
+
+.eraser_cursor {
+    cursor: url("/assets/eraser_scaled.svg") 0 35, default;
+}
