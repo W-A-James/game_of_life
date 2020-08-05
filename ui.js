@@ -2,7 +2,10 @@ let navGhost;
 let nav;
 let navIsMoving = false;
 let navIn = false;
-const navWidth = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--nav-width'));
+const navWidth = parseInt(
+    getComputedStyle(document.documentElement)
+    .getPropertyValue('--nav-width')
+);
 
 window.addEventListener("load", ()=>{
     navGhost = document.getElementById("nav_ghost");
@@ -38,4 +41,3 @@ window.addEventListener("load", ()=>{
         }
     }, 50);
 });
-
