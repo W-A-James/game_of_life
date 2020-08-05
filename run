@@ -1,3 +1,100 @@
-#! /bin/bash
+#! /usr/bin/python3
 
-python3 .run > /dev/null 2> /dev/null &
+from argparse import ArgumentParser
+from http.server import HTTPServer, SimpleHTTPRequestHandler
+
+from os import getpid, unlink, kill, fork
+from os.path import exists
+
+import signal
+import sys
+
+
+def run(port, server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
+    server_address = ("", port)
+    httpd = server_class(server_address, handler_class)
+
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+
+
+def kill_srv():
+    with open("pid") as fp:
+        pid = int(fp.read())
+    kill(pid, signal.SIGUSR1)
+    print("Killed server running with pid: {}".format(pid))
+    unlink("pid")
+    print("Deleted file 'pid'")
+
+
+def forked_run(port):
+    pid = fork()
+    if pid == 0:  # child process
+
+        def terminate(*args):
+            sys.stdout.close()
+            sys.stderr.close()
+            exit(0)
+
+        signal.signal(signal.SIGUSR1, terminate)
+
+        # redirect stderr to /dev/null
+        sys.stderr = open("/dev/null", "w")
+
+        # redirect stdout to /dev/null
+        sys.stdout = open("/dev/null", "w")
+
+        run(port)
+
+        exit(0)
+    else:  # parent process
+        print("Now running server on port: {} with pid: {}".format(port, pid))
+        with open("pid", "w") as fp:
+            fp.write(str(pid))
+        exit(0)
+
+
+if __name__ == "__main__":
+    parser = ArgumentParser(description="Run a server on a specified port")
+    parser.add_argument(
+        "-p", "--port", type=int, help="Port on which to run test-server"
+    )
+    parser.add_argument(
+        "-f",
+        "--fork",
+        action="store_true",
+        help="Start server on a separate background process",
+    )
+
+    args = parser.parse_args()
+
+    if exists("pid"):
+        with open("pid") as fp:
+            pid = int(fp.read())
+        try:
+            kill(pid, signal.SIGUSR1)
+            print("Killed server running with pid: {}".format(pid))
+        except ProcessLookupError:
+            pass
+        unlink("pid")
+        print("Deleted file 'pid'")
+
+    if args.port:
+        port = args.port
+        if args.fork:  # suppress output by default
+            forked_run(port)
+        else:
+            run(port)
+    else:
+        port = 8000
+        if args.fork:
+            forked_run(port)
+        else:
+            pid = getpid()
+            with open("pid", "w") as fp:
+                fp.write(str(pid))
+            print("Now running server on port: {} with pid: {}".format(port, pid))
+
+            run(port)

@@ -1,3 +1,6 @@
+:root {
+    --nav-width: 6vw;
+}
 div#container {
     position:relative;
     width: 100%;
@@ -5,6 +8,8 @@ div#container {
     background-color: rgba(0,0,0,0);
     margin-left: auto;
     margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 
 div#parent-div {
@@ -17,6 +22,7 @@ div#parent-div {
     flex-direction: column;
     justify-content: space-around;
     flex-wrap: nowrap;
+    box-shadow: 1em 1em 1em rgba(0,0,0, 0.2);
 }
 
 div.row {
@@ -48,7 +54,86 @@ div.grid-square-full {
     box-shadow: inset 0px 0px 0px 1px rgba(255, 255, 255, 0.1);
 }
 
+div#nav {
+    height: 100%;
+    width: var(--nav-width);
+    position: fixed;
+    top: 0px;
+    left: 0vh;
+    display: block;
+    margin-left: 0px;
+    background-color: #808080;
+    border-radius: 0 0.5em 0.5em 0;
+    box-shadow: 0vw 0em 0.5em rgba(0,0,0, 0.2);
+    z-index: 100;
+}
+
+div#nav button {
+    display: block;
+    width: 100%;
+    border-style: none;
+    background-color: rgba(0, 0, 0, 0);
+    padding: 10px 5px 10px 5px;
+    font-size: large;
+    outline: none;
+    font-family: 'Mulish', sans-serif !important;
+}
+
+.movingIn {
+    animation-name: slide_in;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+.movingOut {
+    animation-name: slide_out;
+    animation-duration: 1s;
+    animation-fill-mode: forwards;
+}
+
+@keyframes slide_out {
+    from {left: calc(-1 * var(--nav-width) - 1vw);}
+    to   {left: 0vw;}
+}
+
+@keyframes slide_in {
+    from {left: 0vw;}
+    to   {left: calc(-1 * var(--nav-width) - 1vw);}
+}
+
+div#nav_ghost {
+    width: 0.5vw;
+    position: fixed;
+    left: 0vh;
+    top: 5vh;
+    bottom: 5vh;
+    margin-left: 0px;
+    height: 90vh;
+    z-index: 110;
+}
+
+div#nav button:hover {
+    color: white;
+}
+
 body {
     padding: 0;
-    background-color: blue;
+    background-color: #40C0C0;
+    font-family: 'Mulish', sans-serif !important;
+}
+
+.selected {
+    color: rgb(0, 255, 255);
+}
+
+.deselected {
+    color: black;
+}
+
+.pen_cursor {
+    cursor: url("/assets/pen_scaled.svg") 0 35, default;
+}
+
+.eraser_cursor {
+    cursor: url("/assets/eraser_scaled.svg") 0 35, default;
 }

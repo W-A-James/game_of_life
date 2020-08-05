@@ -1,16 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
+        <meta charset="UTF-8">
         <title>Life</title>
         <link href="https://w-a-james.github.io/game_of_life/style.css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300&display=swap" rel="stylesheet">
     </head>
     <body>
-        <button onclick="pauseSim()" id="pauseButton">Play</button>
-        <button onclick="resetSim()" id="resetButton">Reset</button>
+        <div id="nav">
+            <button onclick="pauseSim()" id="pauseButton">Play</button>
+            <button onclick="resetSim()" id="resetButton">Reset</button>
+            <button onclick="startDrawing()" id="drawButton">Draw</button>
+            <button onclick="startClearing()" id="clearButton">Clear</button>
+        </div>
+        <div id="nav_ghost"></div>
+
         <div id="container">
             <div id="parent-div"></div>
         </div>
     </body>
     <script src="https://w-a-james.github.io/game_of_life/index.js"></script>
+    <script src="https://w-a-james.github.io/game_of_life/ui.js"></script>
     <script src="https://w-a-james.github.io/game_of_life/target/life.js"></script>
 </html>
